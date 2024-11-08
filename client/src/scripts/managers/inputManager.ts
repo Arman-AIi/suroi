@@ -341,51 +341,48 @@ export class InputManager {
                 shootOnRelease = false;
             });
         }
-        const gamepadJoysticks = () => {
+        const gamepadJoysticks = (): void => {
             const gamepads = navigator.getGamepads();
             if (gamepads[0]) {
-                const leftJoystickMoving = gamepads[0].axes[0] !== 0 || gamepads[0].axes[1] !== 0
-                const rightJoystickMoving = gamepads[0].axes[2] !== 0 || gamepads[0].axes[3] !== 0
-                //const rightJoystickDistance = Math.sqrt(gamepads[0].axes[2] * gamepads[0].axes[2] + gamepads[0].axes[3] * gamepads[0].axes[3]);
-                //distance formula for stuff like throwables, USAS-12, and M590M
-                if(leftJoystickMoving){
+                const leftJoystickMoving = gamepads[0].axes[0] !== 0 || gamepads[0].axes[1] !== 0;
+                const rightJoystickMoving = gamepads[0].axes[2] !== 0 || gamepads[0].axes[3] !== 0;
+                // const rightJoystickDistance = Math.sqrt(gamepads[0].axes[2] * gamepads[0].axes[2] + gamepads[0].axes[3] * gamepads[0].axes[3]);
+                // distance formula for stuff like throwables, USAS-12, and M590M
+                if (leftJoystickMoving) {
                     const movementAngle = Math.atan2(gamepads[0].axes[1], gamepads[0].axes[0]);
                     this.movementAngle = movementAngle;
                     this.movement.moving = true;
-                    //note: movement.moving only works on mobile 
-                    
+                    // note: movement.moving only works on mobile
                     if (!rightJoystickMoving) {
                         this.rotation = movementAngle;
                         this.turning = true;
-                        const activePlayer = game.activePlayer; 
-                        
+                        const activePlayer = game.activePlayer;
                         if (game.console.getBuiltInCVar("cv_responsive_rotation") && !game.gameOver && game.activePlayer) {
                             game.activePlayer.container.rotation = this.rotation;
                             this.turning = true;
                         }
-                    if(!activePlayer) return;
-                    activePlayer.images.aimTrail.alpha = 0;
+                        if (!activePlayer) return;
+                        activePlayer.images.aimTrail.alpha = 0;
                     }
-                }
-                else{
+                } else {
                     this.movement.moving = false;
                 }
 
-                if(rightJoystickMoving){
+                if (rightJoystickMoving) {
                     this.rotation = Math.atan2(gamepads[0].axes[3], gamepads[0].axes[2]);
                     this.turning = true;
                     const activePlayer = game.activePlayer;
 
                     if (game.console.getBuiltInCVar("cv_responsive_rotation") && !game.gameOver && activePlayer) {
-                    game.activePlayer.container.rotation = this.rotation;
+                        game.activePlayer.container.rotation = this.rotation;
                     }
 
-                if (!activePlayer) return;
-                activePlayer.images.aimTrail.alpha = 1;
+                    if (!activePlayer) return;
+                    activePlayer.images.aimTrail.alpha = 1;
                 }
             }
             requestAnimationFrame(gamepadJoysticks);
-        }
+        };
         gamepadJoysticks();
     }
 
