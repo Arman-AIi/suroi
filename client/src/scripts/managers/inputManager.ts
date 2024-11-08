@@ -346,15 +346,14 @@ export class InputManager {
             if (gamepads[0]) {
                 const leftJoystickMoving = gamepads[0].axes[0] !== 0 || gamepads[0].axes[1] !== 0
                 const rightJoystickMoving = gamepads[0].axes[2] !== 0 || gamepads[0].axes[3] !== 0
-                
-                //Euclidean distance formula for stuff like throwables, USAS-12, and M590M
-                const rightJoystickDistance = Math.sqrt(gamepads[0].axes[2] * gamepads[0].axes[2] + gamepads[0].axes[3] * gamepads[0].axes[3]);
-
+                //const rightJoystickDistance = Math.sqrt(gamepads[0].axes[2] * gamepads[0].axes[2] + gamepads[0].axes[3] * gamepads[0].axes[3]);
+                //distance formula for stuff like throwables, USAS-12, and M590M
                 if(leftJoystickMoving){
                     const movementAngle = Math.atan2(gamepads[0].axes[1], gamepads[0].axes[0]);
                     this.movementAngle = movementAngle;
                     this.movement.moving = true;
-
+                    //note: movement.moving only works on mobile 
+                    
                     if (!rightJoystickMoving) {
                         this.rotation = movementAngle;
                         this.turning = true;
