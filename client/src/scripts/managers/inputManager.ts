@@ -1,5 +1,6 @@
 import $ from "jquery";
 import nipplejs, { type JoystickOutputData } from "nipplejs";
+import * as PIXI from "pixi.js";
 import { isMobile } from "pixi.js";
 import { GameConstants, InputActions } from "../../../../common/src/constants";
 import { type WeaponDefinition } from "../../../../common/src/definitions/loots";
@@ -341,7 +342,9 @@ export class InputManager {
                 shootOnRelease = false;
             });
         }
-        const gamepadJoysticks = (): void => {
+        const ticker = new PIXI.Ticker();
+        ticker.stop();
+        ticker.add(() => {
             const gamepads = navigator.getGamepads();
             if (gamepads[0]) {
                 const leftJoystickMoving = gamepads[0].axes[0] !== 0 || gamepads[0].axes[1] !== 0;
@@ -381,9 +384,8 @@ export class InputManager {
                     activePlayer.images.aimTrail.alpha = 1;
                 }
             }
-            requestAnimationFrame(gamepadJoysticks);
-        };
-        gamepadJoysticks();
+        });
+        ticker.start();
     }
 
     private handleInputEvent(down: boolean, event: KeyboardEvent | MouseEvent | WheelEvent): void {
